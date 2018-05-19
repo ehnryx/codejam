@@ -21,7 +21,8 @@ ostream& operator << (ostream& os, const pair<T,U>& v) {
 }
 template <class T> 
 ostream& operator << (ostream& os, const vector<T>& v) {
-	for (const T& it : v) os << it << " "; return os;
+	for (const T& it : v) os << it << " ";
+	return os;
 }
 template <class T> 
 ostream& operator << (ostream& os, const set<T>& v) {
