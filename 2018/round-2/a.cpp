@@ -21,8 +21,7 @@ ostream& operator << (ostream& os, const pair<T,U>& v) {
 }
 template <class T> 
 ostream& operator << (ostream& os, const vector<T>& v) {
-	for (const T& it : v) os << it << " ";
-	return os;
+	for (const T& it : v) os << it << " "; return os;
 }
 template <class T> 
 ostream& operator << (ostream& os, const set<T>& v) {
@@ -58,13 +57,58 @@ int main() {
 
 ////////////////////////////////////////////////////////////////////////
 
+const int N = 104;
+int arr[N], goal[N];
+char grid[N][N+6];
+
 void caseinit() {
 }
 
 void solve() {
 	caseinit();
 
-	
+	int n;
+	cin >> n;
+
+	for (int i=0; i<n; i++) {
+		for (int j=0; j<n+3; j++) {
+			grid[i][j] = '.';
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+
+	if (arr[0] == 0 || arr[n-1] == 0) {
+		cout << "IMPOSSIBLE" << nl;
+		return;
+	}
+
+	int cur = 0;
+	for (int i = 0; i < n; i++) {
+		while (arr[i]--) {
+			goal[cur++] = i;
+		}
+	}
+
+	int ans = 0;
+	for (int i = 0; i < n; i++) {
+		int diff = goal[i]-i;
+		ans = max(ans, abs(diff));
+		for (int r = 0; r < abs(diff); r++) {
+			if (diff<0) grid[r][i-r] = '/';
+			else grid[r][i+r] = '\\';
+		}
+	}
+	cout << ans+1 << nl;
+
+	for (int r=0; r<=ans; r++) {
+		for (int i=0; i<n; i++) {
+			cout << grid[r][i];
+		}
+		cout << nl;
+	}
 
 	return;
 }

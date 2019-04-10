@@ -43,7 +43,7 @@ void init() {
 int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0); cout.tie(0);
-	cout << fixed << setprecision(10);
+	cout << fixed << setprecision(1);
 	init();
 
 	int T;
@@ -58,13 +58,71 @@ int main() {
 
 ////////////////////////////////////////////////////////////////////////
 
+map<set<pii>,int> seen;
+
 void caseinit() {
+	seen.clear();
+}
+
+int jam(int red, int blue, set<pii> vis) {
+	if (seen.count(vis)) return seen[vis];
+
+	int res = 0;
+	for (const pii& it : vis) {
+		pii nxt;
+		nxt = pii(it.first, it.second+1);
+		if (nxt.first <= red && nxt.second <= blue && !vis.count(nxt)) {
+			set<pii> pass = vis;
+			pass.insert(nxt);
+			res = max(res, 1 + jam(red - nxt.first, blue - nxt.second, pass));
+		}
+		nxt = pii(it.first+1, it.second);
+		if (nxt.first <= red && nxt.second <= blue && !vis.count(nxt)) {
+			set<pii> pass = vis;
+			pass.insert(nxt);
+			res = max(res, 1 + jam(red - nxt.first, blue - nxt.second, pass));
+		}
+	}
+
+	return seen[vis] = res;
 }
 
 void solve() {
-	caseinit();
+cerr << nl;
 
-	
+	int n, m;
+	cin >> n >> m;
+	for (int r = 0; r <= n; r++) {
+		for (int b = 0; b <= m; b++) {
+	caseinit();
+			int red = r;
+			int blue = b;
+
+	int ans = 0;
+	set<pii> vis;
+	if (red > 0) {
+		ans++;
+		red--;
+		vis.insert(pii(1,0));
+	}
+	if (blue > 0) {
+		ans++;
+		blue--;
+		vis.insert(pii(0,1));
+	}
+	ans += jam(red,blue,vis);
+
+	cout << (ld)ans << " ";
+		}
+		cout << nl;
+	}
+
+for (int r=0; r<= n; r++) {
+	for (int b=0; b<=m; b++) {
+		cout << sqrt(r)*sqrt(b) << " ";
+	}
+	cout << nl;
+}
 
 	return;
 }
